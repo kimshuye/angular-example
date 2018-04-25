@@ -9,12 +9,14 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { ChildComponent } from './child/child.component';
 import { ParentComponent } from './parent/parent.component';
+import { SiblingComponent } from './sibling/sibling.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChildComponent,
-    ParentComponent
+    ParentComponent,
+    SiblingComponent
   ],
   imports: [
     BrowserModule,
