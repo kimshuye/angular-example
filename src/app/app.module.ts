@@ -7,14 +7,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppComponent } from './app.component';
 
 import { environment } from '../environments/environment';
-import { ChildComponent } from './child/child.component';
-import { ParentComponent } from './parent/parent.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ChildComponent,
-    ParentComponent
+    AppComponent
+    
   ],
   imports: [
     BrowserModule,
