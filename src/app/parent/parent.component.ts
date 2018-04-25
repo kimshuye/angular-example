@@ -1,4 +1,4 @@
-import { Component, OnInit , ViewChild , AfterViewInit } from '@angular/core';
+import { Component, OnInit , ViewChild , AfterViewInit, Input, Output } from '@angular/core';
 import { DataService } from '../data.service';
 // import { ChildComponent } from '../child/child.component';
 
@@ -27,6 +27,10 @@ export class ParentComponent implements OnInit {
 
   receiveMessage($event){
     this.message = $event;
+  }
+
+  sendMessage(){
+    this.data.changMessage(this.message);
   }
 
 }

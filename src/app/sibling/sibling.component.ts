@@ -15,7 +15,6 @@ export class SiblingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.message ="default";
     this.data.currentMessage.subscribe(message => this.message = message);
   }
 

@@ -1,5 +1,6 @@
-<div style="background-color:mediumblue; width:20em;height:20em;">
+<div style="background-color:mediumblue; width:25em;height:20em;">
   <h1>Parent</h1>
-  Message : {{message}}
+  Message : <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()">
+  <button (click)="sendMessage()">Send Message</button>
   <app-child (messageEvent)="receiveMessage($event)"></app-child>
 </div>
