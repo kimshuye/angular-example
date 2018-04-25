@@ -1,4 +1,5 @@
 import { Component, OnInit, Input ,Output ,EventEmitter } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-child',
@@ -8,17 +9,18 @@ import { Component, OnInit, Input ,Output ,EventEmitter } from '@angular/core';
 export class ChildComponent implements OnInit {
 
   // @Input()message:string;
-  message: string = "Hello child";
+  message: string;
 
-  @Output() messageEvent = new EventEmitter<string>();
+  // @Output() messageEvent = new EventEmitter<string>();
   
-  constructor() { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.data.currentMessage.subscribe(message => this.message = message);
   }
 
   sendMessage(){
-    this.messageEvent.emit(this.message);
+    this.data.changMessage("Hello child");
   }
 
 }

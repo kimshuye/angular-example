@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-sibling',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiblingComponent implements OnInit {
 
-  constructor() { }
+  message:string;
+
+  constructor(
+    private data:DataService
+  ) { }
 
   ngOnInit() {
+    this.message ="default";
+    this.data.currentMessage.subscribe(message => this.message = message);
+  }
+
+  newMessage(){
+    this.data.changMessage("Hello from Sibling");
   }
 
 }

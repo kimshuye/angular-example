@@ -10,6 +10,7 @@ import { environment } from '../environments/environment';
 import { ChildComponent } from './child/child.component';
 import { ParentComponent } from './parent/parent.component';
 import { SiblingComponent } from './sibling/sibling.component';
+import { DataService } from './data.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { SiblingComponent } from './sibling/sibling.component';
     AppRoutingModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
