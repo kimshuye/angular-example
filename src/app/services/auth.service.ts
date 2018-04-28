@@ -10,51 +10,51 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
 
-  user$: Observable<User>;
+  currentUser;
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,
-              private router: Router) {
-      //// Get auth data, then get firestore user document || null
-      this.user$ = this.afAuth.authState
-        .switchMap(user => {
-          if (user) {
-            return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
-          } else {
-            return Observable.of(null)
-          }
-        })
+              private db: AngularFireDatabase) {
+
+              this.afAuth.authState.switchMap(auth => {
+                  if (auth) {
+                    this.currentUser = auth
+                    return this.db.object<User>(`/users/${auth.uid}`).valueChanges()
+                  } else return Observable.of<User>(null);
+                })
+                .subscribe(user => {
+                    this.currentUser['username'] = user.username
+                })
+
+             }
+
+   googleLogin() {
+     const provider = new firebase.auth.GoogleAuthProvider()
+     return this.afAuth.auth.signInWithPopup(provider)
+       .then(() =>  console.log('successful auth'))
+       .catch(error => console.log(error));
+   }
+
+   get hasUsername() {
+    return this.currentUser.username ? true : false
+  }
+ 
+  checkUsername(username: string) {
+    username = username.toLowerCase()
+    return this.db.object<User>(`usernames/${username}`)
+  }
+ 
+  updateUsername(username: string) {
+ 
+    let data = {}
+    data[username] = this.currentUser.uid
+ 
+    this.db.object<User>(`/users/${this.currentUser.uid}`).update({"username": username})
+    this.db.object<User>(`/usernames`).update(data)
   }
 
-    ///// Login/Signup //////
-    googleLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider()
-      return this.oAuthLogin(provider);
-    }
-  
-    private oAuthLogin(provider) {
-      return this.afAuth.auth.signInWithPopup(provider)
-        .then((credential) => {
-          this.updateUserData(credential.user)
-        })
-    }
-  
-    signOut() {
-      this.afAuth.auth.signOut()
-    }
-  
-    private updateUserData(user) {
-      // Sets user data to firestore on login
-      const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-      const data: User = {
-        uid: user.uid,
-        email: user.email,
-        roles: {
-          subscriber: true
-        }
-      }
-      return userRef.set(data, { merge: true })
-    }
+  logout() {
+    return this.afAuth.auth.signOut();
+  }
 
 }
 
@@ -67,6 +67,7 @@ export interface Roles {
 
 export interface User {
   uid: string;
-  email: string;
-  roles: Roles;
+  username: string;
+  // email: string;
+  // roles: Roles;
 }
